@@ -22,14 +22,12 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         _input.MoveInput += OnMove;
-        _input.CrouchInput += OnCrouch;
         _input.SpinDashInput += OnSpinDash;
     }
 
     private void OnDisable()
     {
         _input.MoveInput -= OnMove;
-        _input.CrouchInput -= OnCrouch;
         _input.SpinDashInput -= OnSpinDash;
     }
 
@@ -38,15 +36,9 @@ public class PlayerController : MonoBehaviour
         _motor.Move(movement * _moveSpeed);
     }
 
-    void OnCrouch()
-    {
-        _motor.Crouch();
-    }
-
     void OnSpinDash()
     {
         _spinSpeed = _input._chargedSpeed;
         //Debug.Log(_spinSpeed);
-        _motor.SpinDash(_spinSpeed);
     }
 }
