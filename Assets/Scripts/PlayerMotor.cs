@@ -17,12 +17,12 @@ public class PlayerMotor : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        _anim = GameObject.Find("Art").GetComponent<Animator>();
+        _anim = this.transform.Find("Art").Find("character1").GetComponent<Animator>();
     }
 
     private void Update()
     {
-        if (_anim != null)
+        if (_anim != null && _anim.isActiveAndEnabled)
         {
             _crouch = _anim.GetBool("Crouching");
             _spinDash = _anim.GetFloat("Speed") > 1;
@@ -31,7 +31,9 @@ public class PlayerMotor : MonoBehaviour
                 _activateSpinDash = false;
             }
         }
-            
+        if (_anim.GetFloat("Speed") == 0)
+            _rb.velocity = new Vector3(0, 0, 0);
+        //Debug.Log(_rb.velocity);
     }
 
     void FixedUpdate()
@@ -57,9 +59,17 @@ public class PlayerMotor : MonoBehaviour
     {
         if (spinning == true && _crouch == false && !_activateSpinDash) 
         {
-            Debug.Log("Applied force");
-            _rb.velocity = (5f * this.transform.right * _anim.GetFloat("Speed"));
+            //Debug.Log("Applied force");
+            if (_anim.isActiveAndEnabled)
+            {
+                _rb.velocity = (5f * this.transform.right * _anim.GetFloat("Speed"));
+            }
             _activateSpinDash = true;
+        }
+        if (spinning == true && _anim.isActiveAndEnabled)
+        {
+            _anim.transform.Rotate(new Vector3(_anim.GetFloat("Speed") * 5f, 0, 0), Space.Self);
+            //_anim.transform.localPosition.y = Math.Sin(_anim.GetFloat("Speed"));
         }
     }
 }
